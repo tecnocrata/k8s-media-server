@@ -12,11 +12,11 @@ general:
   pgid: 1000
   #Persistent storage selections and pathing
   storage:
-    customVolume: false  #set to true if not using a PVC (must provide volume below)
+    customVolume: true  #set to true if not using a PVC (must provide volume below)
     pvcName: mediaserver-pvc
     size: 5Gi
+    accessMode: "ReadWriteMany"
     pvcStorageClass: ""
-    accessMode: ""
     # the path starting from the top level of the pv you're passing. If your share is server.local/share/, then tv is server.local/share/media/tv
     subPaths:
       tv: media/tv
@@ -25,11 +25,14 @@ general:
       transmission: transmission
       sabnzbd: sabnzbd
       config: config
-    volumes: {}
+    volumes:
+        nfs:
+          server: 10.70.154.1
+          path: /srv/nfs/shared/media-server
     #  hostPath:
     #    path: /mnt/share
   ingress:
-    ingressClassName: ""
+    ingressClassName: "nginx"
 
 sonarr:
   enabled: true
@@ -38,7 +41,9 @@ sonarr:
     nodeSelector: {}
     port: 8989
   service:
-    type: ClusterIP
+    annotations:
+      metallb.universe.tf/allow-shared-ip: shared-ip-group
+    type: LoadBalancer
     port: 8989
     nodePort:
     extraLBService: false
@@ -69,7 +74,9 @@ radarr:
     nodeSelector: {}
     port: 7878
   service:
-    type: ClusterIP
+    annotations:
+      metallb.universe.tf/allow-shared-ip: shared-ip-group
+    type: LoadBalancer
     port: 7878
     nodePort:
     extraLBService: false
@@ -98,7 +105,9 @@ jackett:
     nodeSelector: {}
     port: 9117
   service:
-    type: ClusterIP
+    annotations:
+      metallb.universe.tf/allow-shared-ip: shared-ip-group
+    type: LoadBalancer
     port: 9117
     nodePort:
     extraLBService: false
@@ -129,14 +138,16 @@ transmission:
       utp: 9091
       peer: 51413
   service:
+    annotations:
+      metallb.universe.tf/allow-shared-ip: shared-ip-group
     utp:
-      type: ClusterIP
+      type: LoadBalancer
       port: 9091
       nodePort:
       # Defines an additional LB service, requires cloud provider service or MetalLB
       extraLBService: false
     peer:
-      type: ClusterIP
+      type: LoadBalancer
       port: 51413
       nodePort:
       nodePortUDP:
@@ -173,14 +184,16 @@ sabnzbd:
       http: 8080
       https: 9090
   service:
+    annotations:
+      metallb.universe.tf/allow-shared-ip: shared-ip-group
     http:
-      type: ClusterIP
+      type: LoadBalancer
       port: 8080
       nodePort:
       # Defines an additional LB service, requires cloud provider service or MetalLB
       extraLBService: false
     https:
-      type: ClusterIP
+      type: LoadBalancer
       port: 9090
       nodePort:
       # Defines an additional LB service, requires cloud provider service or MetalLB
@@ -210,7 +223,9 @@ prowlarr:
     nodeSelector: {}
     port: 9696
   service:
-    type: ClusterIP
+    annotations:
+      metallb.universe.tf/allow-shared-ip: shared-ip-group
+    type: LoadBalancer
     port: 9696
     nodePort: 
     extraLBService: false
@@ -240,7 +255,9 @@ plex:
     nodeSelector: {}
     port: 32400
   service:
-    type: ClusterIP
+    annotations:
+      metallb.universe.tf/allow-shared-ip: shared-ip-group
+    type: LoadBalancer
     port: 32400
     nodePort:
     # Defines an additional LB service, requires cloud provider service or MetalLB

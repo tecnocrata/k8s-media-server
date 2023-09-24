@@ -89,6 +89,8 @@ metadata:
   name: plex
   labels:
     {{- include "k8s-mediaserver.labels" . | nindent 4 }}
+  annotations:
+    {{- toYaml .Values.plex.service.annotations | nindent 4 }}
 spec:
   type: {{ .Values.plex.service.type }}
   ports:

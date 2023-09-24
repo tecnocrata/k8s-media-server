@@ -5,6 +5,10 @@ Your all-in-one resource for your media needs!
 I am so happy to announce the first release of the **k8s-mediaserver-operator**, a project that mixes up some of the
 mainstream tools for your media needs.
 
+```sh
+helm install -f k8s-mediaserver.yml k8s-mediaserver ./helm-charts/k8s-mediaserver/ -n media-server
+```
+
 The Custom Resource that is implemented, allows you to create a fully working and complete media server on #kubernetes,
 based on:
 

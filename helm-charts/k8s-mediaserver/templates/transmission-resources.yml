@@ -218,6 +218,8 @@ metadata:
   name: transmission-peer-tcp
   labels:
     {{- include "k8s-mediaserver.labels" . | nindent 4 }}
+  annotations:
+    {{- toYaml .Values.transmission.service.annotations | nindent 4 }}
 spec:
   type: {{ .Values.transmission.service.peer.type }}
   ports:

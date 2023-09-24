@@ -146,6 +146,8 @@ metadata:
     {{- include .Values.jackett.service.extraLBService.annotations . | nindent 4 }}
   labels:
     {{- include "k8s-mediaserver.labels" . | nindent 4 }}
+  annotations:
+    {{- toYaml .Values.jackett.service.annotations | nindent 4 }}
 spec:
   type: LoadBalancer
   ports:

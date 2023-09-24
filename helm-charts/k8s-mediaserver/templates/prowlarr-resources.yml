@@ -123,6 +123,8 @@ metadata:
   name: prowlarr
   labels:
     {{- include "k8s-mediaserver.labels" . | nindent 4 }}
+  annotations:
+    {{- toYaml .Values.prowlarr.service.annotations | nindent 4 }}
 spec:
   type: {{ .Values.prowlarr.service.type }}
   ports:
