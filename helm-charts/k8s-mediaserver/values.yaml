@@ -215,6 +215,29 @@ sabnzbd:
   #  storage: 5Gi
   #  selector: {}
 
+bazarr:
+  enabled: true
+  container:
+    image: docker.io/linuxserver/bazarr
+    nodeSelector: {}
+    port: 6767
+  service:
+    annotations:
+      metallb.universe.tf/allow-shared-ip: shared-ip-group
+    type: LoadBalancer
+    port: 6767
+    nodePort:
+    extraLBService: false
+  ingress:
+    enabled: true
+    annotations: {}
+    path: /bazarr
+    tls:
+      enabled: false
+      secretName: ""
+  resources: {}
+  volume: {}
+
 prowlarr:
   enabled: true
   container: 
